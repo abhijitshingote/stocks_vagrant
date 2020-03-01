@@ -1,0 +1,33 @@
+#content-table,#content-table th,#content-table td {
+	border-color: #f7b4c347;
+	border-width: 0.5px;
+	border-style: solid;
+	border-collapse: collapse;
+	padding: 3px;
+	text-align: center;
+  	color: #9c0303 !important;
+}
+
+#content-table th {
+	color: #750303 !important;
+}
+
+#header-table  {
+	text-align:  center;
+	margin: auto;
+}
+
+#header-table td {
+	padding: 5px;
+}
+body {
+	padding: 15px ;
+	background-color: #ad919747 !important;
+	color : #750303 !important;
+}
+
+.btn-primary {
+    color: #9c0303 !important;
+    background-color: #f7b4c347 !important;
+    border-color: #f7b4c347 !important;
+}
