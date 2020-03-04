@@ -24,7 +24,7 @@ CREATE FUNCTION get_return() RETURNS void AS $$
 drop table if exists public.return_1_day;
 create table return_1_day
 as 
-select today.symbol,s.sector,s.industry,s."marketCap",s."shortName",today.date_traded,today.close_price as latest_close,prior.close_price as prior_close,
+select today.symbol,s.sector,s.industry,TRUNC(s."marketCap"::numeric/1000000000,2) as marketcap,s."shortName",today.date_traded,today.close_price as latest_close,prior.close_price as prior_close,
 round(((100*(today.close_price - prior.close_price)/prior.close_price)::numeric),2) as return_percentage, now() as timestamp_updated
 from (
 select  ph.date_traded,ph.symbol,ph.close_price
@@ -40,7 +40,7 @@ inner join  public.stockinfo s on (today.symbol=s.symbol);
 drop table if exists public.return_7_day;
 create table return_7_day
 as 
-select today.symbol,s.sector,s.industry,s."marketCap",s."shortName",today.date_traded,today.close_price as latest_close,prior.close_price as prior_close,
+select today.symbol,s.sector,s.industry,TRUNC(s."marketCap"::numeric/1000000000,2) as marketcap,s."shortName",today.date_traded,today.close_price as latest_close,prior.close_price as prior_close,
 round(((100*(today.close_price - prior.close_price)/prior.close_price)::numeric),2) as return_percentage, now() as timestamp_updated
 from (
 select  ph.date_traded,ph.symbol,ph.close_price
@@ -56,7 +56,7 @@ inner join  public.stockinfo s on (today.symbol=s.symbol);
 drop table if exists public.return_14_day;
 create table return_14_day
 as 
-select today.symbol,s.sector,s.industry,s."marketCap",s."shortName",today.date_traded,today.close_price as latest_close,prior.close_price as prior_close,
+select today.symbol,s.sector,s.industry,TRUNC(s."marketCap"::numeric/1000000000,2) as marketcap,s."shortName",today.date_traded,today.close_price as latest_close,prior.close_price as prior_close,
 round(((100*(today.close_price - prior.close_price)/prior.close_price)::numeric),2) as return_percentage, now() as timestamp_updated
 from (
 select  ph.date_traded,ph.symbol,ph.close_price
@@ -72,7 +72,7 @@ inner join  public.stockinfo s on (today.symbol=s.symbol);
 drop table if exists public.return_30_day;
 create table return_30_day
 as 
-select today.symbol,s.sector,s.industry,s."marketCap",s."shortName",today.date_traded,today.close_price as latest_close,prior.close_price as prior_close,
+select today.symbol,s.sector,s.industry,TRUNC(s."marketCap"::numeric/1000000000,2) as marketcap,s."shortName",today.date_traded,today.close_price as latest_close,prior.close_price as prior_close,
 round(((100*(today.close_price - prior.close_price)/prior.close_price)::numeric),2) as return_percentage, now() as timestamp_updated
 from (
 select  ph.date_traded,ph.symbol,ph.close_price

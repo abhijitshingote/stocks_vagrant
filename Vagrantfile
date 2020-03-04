@@ -19,7 +19,7 @@ sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagran
 sudo service postgresql restart
 sudo su - postgres -c "pg_restore -d stockdb /vagrant/populate_stockinfotable_from_local.sql"
 # new
-sudo su - postgres -c "psql stockdb < /vagrant/populate_stock_price_history_dev.sql"
+sudo su - postgres -c "gunzip -c /vagrant/compressed_stock_price_history.gz | psql stockdb "
 sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql"
 # end new
 sudo pip install virtualenv

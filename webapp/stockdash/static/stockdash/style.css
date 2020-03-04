@@ -1,11 +1,16 @@
+table {
+  table-layout: auto;
+}
+
 #content-table,#content-table th,#content-table td {
-	border-color: #f7b4c347;
+/*	border-color: #f7b4c347;
 	border-width: 0.5px;
-	border-style: solid;
+	border-style: solid;*/
 	border-collapse: collapse;
 	padding: 3px;
 	text-align: center;
   	color: #9c0303 !important;
+  	border-bottom:  2px solid  #f7b4c347;
 }
 
 #content-table th {
