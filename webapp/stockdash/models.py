@@ -1,5 +1,4 @@
 from django.db import models
-
 class PriceHistory(models.Model):
     symbol = models.CharField(max_length=10, blank=True, null=True)
     date_traded = models.DateField(blank=True, null=True)
@@ -15,11 +14,11 @@ class PriceHistory(models.Model):
 
 
 class Return14Day(models.Model):
-    symbol = models.CharField(max_length=10, blank=True, null=True)
-    sector = models.TextField(blank=True, null=True)
-    industry = models.TextField(blank=True, null=True)
-    marketcap = models.BigIntegerField(blank=True, null=True)  # Field name made lowercase.
-    shortname = models.TextField(db_column='shortName', blank=True, null=True)  # Field name made lowercase.
+    symbol = models.CharField(max_length=10, primary_key=True)
+    sector = models.CharField(max_length=200, blank=True, null=True)
+    industry = models.CharField(max_length=200, blank=True, null=True)
+    marketcap = models.FloatField(blank=True, null=True)
+    symbolname = models.CharField(max_length=200, blank=True, null=True)
     date_traded = models.DateField(blank=True, null=True)
     latest_close = models.FloatField(blank=True, null=True)
     prior_close = models.FloatField(blank=True, null=True)
@@ -33,10 +32,10 @@ class Return14Day(models.Model):
 
 class Return1Day(models.Model):
     symbol = models.CharField(max_length=10, primary_key=True)
-    sector = models.TextField(blank=True, null=True)
-    industry = models.TextField(blank=True, null=True)
-    marketcap = models.BigIntegerField( blank=True, null=True)  # Field name made lowercase.
-    shortname = models.TextField(db_column='shortName', blank=True, null=True)  # Field name made lowercase.
+    sector = models.CharField(max_length=200, blank=True, null=True)
+    industry = models.CharField(max_length=200, blank=True, null=True)
+    marketcap = models.FloatField(blank=True, null=True)
+    symbolname = models.CharField(max_length=200, blank=True, null=True)
     date_traded = models.DateField(blank=True, null=True)
     latest_close = models.FloatField(blank=True, null=True)
     prior_close = models.FloatField(blank=True, null=True)
@@ -49,11 +48,11 @@ class Return1Day(models.Model):
 
 
 class Return30Day(models.Model):
-    symbol = models.CharField(max_length=10, blank=True, null=True)
-    sector = models.TextField(blank=True, null=True)
-    industry = models.TextField(blank=True, null=True)
-    marketcap = models.BigIntegerField( blank=True, null=True)  # Field name made lowercase.
-    shortname = models.TextField(db_column='shortName', blank=True, null=True)  # Field name made lowercase.
+    symbol = models.CharField(max_length=10, primary_key=True)
+    sector = models.CharField(max_length=200, blank=True, null=True)
+    industry = models.CharField(max_length=200, blank=True, null=True)
+    marketcap = models.FloatField(blank=True, null=True)
+    symbolname = models.CharField(max_length=200, blank=True, null=True)
     date_traded = models.DateField(blank=True, null=True)
     latest_close = models.FloatField(blank=True, null=True)
     prior_close = models.FloatField(blank=True, null=True)
@@ -66,11 +65,11 @@ class Return30Day(models.Model):
 
 
 class Return7Day(models.Model):
-    symbol = models.CharField(max_length=10, blank=True, null=True)
-    sector = models.TextField(blank=True, null=True)
-    industry = models.TextField(blank=True, null=True)
-    marketcap = models.BigIntegerField( blank=True, null=True)  # Field name made lowercase.
-    shortname = models.TextField(db_column='shortName', blank=True, null=True)  # Field name made lowercase.
+    symbol = models.CharField(max_length=10, primary_key=True)
+    sector = models.CharField(max_length=200, blank=True, null=True)
+    industry = models.CharField(max_length=200, blank=True, null=True)
+    marketcap = models.FloatField(blank=True, null=True)
+    symbolname = models.CharField(max_length=200, blank=True, null=True)
     date_traded = models.DateField(blank=True, null=True)
     latest_close = models.FloatField(blank=True, null=True)
     prior_close = models.FloatField(blank=True, null=True)
@@ -97,12 +96,12 @@ class StockPriceHistory(models.Model):
 
 
 class Stockinfo(models.Model):
-    index = models.BigIntegerField(blank=True, null=True)
-    sector = models.TextField(blank=True, null=True)
-    industry = models.TextField(blank=True, null=True)
-    marketcap = models.BigIntegerField(db_column='marketCap', blank=True, null=True)  # Field name made lowercase.
-    shortname = models.TextField(db_column='shortName', blank=True, null=True)  # Field name made lowercase.
-    symbol = models.TextField(blank=True, null=True)
+    stockinfo_id = models.AutoField(primary_key=True)
+    symbol = models.CharField(max_length=10, blank=True, null=True)
+    marketcap = models.FloatField(blank=True, null=True)
+    symbolname = models.CharField(max_length=200, blank=True, null=True)
+    sector = models.CharField(max_length=200, blank=True, null=True)
+    industry = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         managed = False

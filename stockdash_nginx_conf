@@ -1,0 +1,15 @@
+server {
+listen 80;
+server_name 172.168.33.21; #the actual IP of the server; it has a public IP address
+
+access_log /vagrant/access.log;
+error_log /vagrant/error.log;
+
+location /static {
+    root /vagrant/webapp/stockdash/;
+}
+
+location / {
+    proxy_pass http://127.0.0.1:8888;
+}
+}

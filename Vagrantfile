@@ -7,6 +7,7 @@ sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt-get update
 sudo apt-get install python3.6 -y
 sudo apt-get install python-pip -y
+sudo apt-get install nginx -y
 sudo pip install --upgrade pip
 apt-get install -y postgresql
 sudo sed -i "s/#listen_address.*/listen_addresses '*'/" /etc/postgresql/9.5/main/postgresql.conf
@@ -18,10 +19,7 @@ sudo -u postgres psql -c "CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant'
 sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagrant stockdb"
 sudo service postgresql restart
 sudo su - postgres -c "pg_restore -d stockdb /vagrant/populate_stockinfotable_from_local.sql"
-# new
-sudo su - postgres -c "gunzip -c /vagrant/compressed_stock_price_history.gz | psql stockdb "
-sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql"
-# end new
+
 sudo pip install virtualenv
 virtualenv myenv --python=python3.6
 source myenv/bin/activate
@@ -29,29 +27,40 @@ source myenv/bin/activate
 # pip install sqlalchemy
 # pip install requests
 # pip install yfinance
-# pip install psycopg2-binary
+# pip install psycopg2-binary==2.7.7
 # pip install lxml
 pip install django==2.1.2
 pip install django-mathfilters
 pip install psycopg2-binary
-touch /home/vagrant/webserverlog
-sudo chmod 777 /home/vagrant/webserverlog
-sudo /home/vagrant/myenv//bin/python  /vagrant/webapp/manage.py runserver 0.0.0.0:80 > /home/vagrant/webserverlog
+pip install gunicorn
 
 sudo rm /etc/localtime
 sudo ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 sudo service cron restart
 
 # /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py
+sudo su - postgres -c "gunzip -c /vagrant/compressed_stock_price_history.gz | psql stockdb "
+
+sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql"
 sudo su postgres -c "psql -d stockdb -a -f /vagrant/removeduplicates_from_stockpricehistory.sql"
 touch /home/vagrant/autofile
 sudo chmod 777 /home/vagrant/autofile
+
+#### DAILY JOB BELOW
 # echo "30 16 * * 1-5 /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py  >> /vagrant/cronlogfile.log" >> mycron
 # echo '30 17 * * 1-5 sudo su postgres -c "psql - stockdb -a -f /vagrant/removeduplicates_from_stockpricehistory.sql" ' >> mycron
+# echo '40 17 * * 1-5 sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql" ' >> mycron
+
 # sudo su - vagrant -c "crontab mycron"
 # rm mycron
 
 date
+sudo cp /vagrant/stockdash_nginx_conf /etc/nginx/sites-enabled/
+sudo systemctl restart nginx
+cd /vagrant/webapp/
+sudo /home/vagrant/myenv/bin/gunicorn --bind 0.0.0.0:8888 --workers 3  webapp.wsgi
+# sudo /home/vagrant/myenv/bin/python  /vagrant/webapp/manage.py runserver 0.0.0.0:80
+
 SCRIPT
 
 Vagrant.configure("2") do |config|
