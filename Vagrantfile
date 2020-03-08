@@ -23,12 +23,12 @@ sudo su - postgres -c "pg_restore -d stockdb /vagrant/populate_stockinfotable_fr
 sudo pip install virtualenv
 virtualenv myenv --python=python3.6
 source myenv/bin/activate
-# pip install pandas
-# pip install sqlalchemy
-# pip install requests
-# pip install yfinance
-# pip install psycopg2-binary==2.7.7
-# pip install lxml
+pip install pandas
+pip install sqlalchemy
+pip install requests
+pip install yfinance
+pip install psycopg2-binary==2.7.7
+pip install lxml
 pip install django==2.1.2
 pip install django-mathfilters
 pip install psycopg2-binary
@@ -38,8 +38,8 @@ sudo rm /etc/localtime
 sudo ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 sudo service cron restart
 
-# /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py
-sudo su - postgres -c "gunzip -c /vagrant/compressed_stock_price_history.gz | psql stockdb "
+/home/vagrant/myenv/bin/python /vagrant/query_yfinance.py
+# sudo su - postgres -c "gunzip -c /vagrant/compressed_stock_price_history.gz | psql stockdb "
 
 sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql"
 sudo su postgres -c "psql -d stockdb -a -f /vagrant/removeduplicates_from_stockpricehistory.sql"
@@ -59,7 +59,7 @@ sudo cp /vagrant/stockdash_nginx_conf /etc/nginx/sites-enabled/
 sudo systemctl restart nginx
 cd /vagrant/webapp/
 sudo /home/vagrant/myenv/bin/gunicorn --bind 0.0.0.0:8888 --workers 3  webapp.wsgi
-# sudo /home/vagrant/myenv/bin/python  /vagrant/webapp/manage.py runserver 0.0.0.0:80
+
 
 SCRIPT
 

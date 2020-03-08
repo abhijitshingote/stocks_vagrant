@@ -9,8 +9,8 @@
 	<title>Stockdash</title>
 </head>
 <body>
-<h2>Welcome to your Stock Dashboard, Radhika! </h2>
-<h2>BOOM BOOM</h2>
+<h2 class="display-4">Welcome to your Stock Dashboard, Radhika!   </h2>
+<h4><span id="todaydate" class="text-muted">last updated {{gainers.0.date_traded}}</span></h4>
 
 <table id="header-table">
 	<tr>
@@ -33,17 +33,33 @@
 
 	</tr>
 </table>
-
+<br>
 <table id="content-table">
 	<tr>
-		<th>SECTOR</th><th>INDUSTRY</th><th>SYMBOL</th><th>NAME</th><th>RETURN</th><th>MARKET CAP</th>
+		<th>SECTOR</th><th>INDUSTRY</th><th>SYMBOL</th><th>NAME</th><th>LAST PRICE</th><th>RETURN</th><th>MARKET CAP</th>
 	</tr>
-	{% for stockobj in oneday_objects %}
+	{% for stockobj in gainers %}
 	<tr>
-		<td>{{stockobj.sector}}</td><td>{{stockobj.industry}}</td><td>{{stockobj.symbol}}</td><td>{{stockobj.symbolname}}</td><td>{{stockobj.return_percentage}}%</td><td>${{stockobj.marketcap}} B</td>
+		<td>{{stockobj.sector}}</td><td>{{stockobj.industry}}</td><td>{{stockobj.symbol}}</td><td>{{stockobj.symbolname}}</td>
+		<td>${{stockobj.latest_close}}</td>
+		<td>{{stockobj.return_percentage}}%</td><td>${{stockobj.marketcap}} B</td>
 	</tr>
 	{% endfor%}
 </table>
+<br><br>
+<table id="content-table">
+	<tr>
+		<th>SECTOR</th><th>INDUSTRY</th><th>SYMBOL</th><th>NAME</th><th>LAST PRICE</th><th>RETURN</th><th>MARKET CAP</th>
+	</tr>
+	{% for stockobj in losers %}
+	<tr>
+		<td>{{stockobj.sector}}</td><td>{{stockobj.industry}}</td><td>{{stockobj.symbol}}</td><td>{{stockobj.symbolname}}</td>
+		<td>${{stockobj.latest_close}}</td>
+		<td>{{stockobj.return_percentage}}%</td><td>${{stockobj.marketcap}} B</td>
+	</tr>
+	{% endfor%}
+</table>
+
 <div id="div1">waht</div>
 
     <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>

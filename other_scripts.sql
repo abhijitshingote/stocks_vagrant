@@ -42,7 +42,7 @@ close_price float,
 volume bigint
 );
 insert into public.price_history (symbol, date_traded, open_price, high_price, low_price, close_price, volume)
-select sph.symbol,sph."Date",sph."Open",sph."High",sph."Low",sph."Close",sph."Volume"
+select sph.symbol,sph."Date",trunc(sph."Open"::numeric,2),trunc(sph."High"::numeric,2),trunc(sph."Low"::numeric,2),trunc(sph."Close"::numeric,2),sph."Volume"
 from public.stock_price_history sph ;
 
 
