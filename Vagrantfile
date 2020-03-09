@@ -47,9 +47,9 @@ touch /home/vagrant/autofile
 sudo chmod 777 /home/vagrant/autofile
 
 #### DAILY JOB BELOW
-# echo "30 16 * * 1-5 /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py  >> /vagrant/cronlogfile.log" >> mycron
-# echo '30 17 * * 1-5 sudo su postgres -c "psql - stockdb -a -f /vagrant/removeduplicates_from_stockpricehistory.sql" ' >> mycron
-# echo '40 17 * * 1-5 sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql" ' >> mycron
+echo "30 16 * * 1-5 /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py  >> /vagrant/cronlogfile.log" >> mycron
+echo '30 17 * * 1-5 sudo su postgres -c "psql - stockdb -a -f /vagrant/removeduplicates_from_stockpricehistory.sql" ' >> mycron
+echo '40 17 * * 1-5 sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql" ' >> mycron
 
 # sudo su - vagrant -c "crontab mycron"
 # rm mycron
