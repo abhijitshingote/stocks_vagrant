@@ -51,8 +51,8 @@ echo "30 16 * * 1-5 /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py  >
 echo '30 17 * * 1-5 sudo su postgres -c "psql - stockdb -a -f /vagrant/removeduplicates_from_stockpricehistory.sql" ' >> mycron
 echo '40 17 * * 1-5 sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql" ' >> mycron
 
-# sudo su - vagrant -c "crontab mycron"
-# rm mycron
+sudo su - vagrant -c "crontab mycron"
+rm mycron
 
 date
 sudo cp /vagrant/stockdash_nginx_conf /etc/nginx/sites-enabled/
@@ -70,8 +70,8 @@ Vagrant.configure("2") do |config|
     v.name = "dev_vm"
   end
 
-  config.vm.network "private_network", ip: "172.168.33.21"
+  config.vm.network "private_network", ip: "172.168.33.10"
   config.vm.network "forwarded_port", guest: 5432, host: 5421
-  config.vm.network "forwarded_port", guest: 80, host: 8081
+  config.vm.network "forwarded_port", guest: 80, host: 8080
   config.vm.provision "shell", inline: $script
 end
