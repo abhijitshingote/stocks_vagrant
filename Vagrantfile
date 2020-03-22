@@ -18,7 +18,8 @@ EOF
 sudo -u postgres psql -c "CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant';"
 sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagrant stockdb"
 sudo service postgresql restart
-sudo su - postgres -c "pg_restore -d stockdb /vagrant/populate_stockinfotable_from_local.sql"
+sudo su - postgres -c "psql stockdb < /vagrant/sql_files/populate_stockinfotable_from_local_insert.sql"
+sudo su - postgres -c "psql stockdb < /vagrant/sql_files/cleanup_stockinfotable.sql"
 
 sudo pip install virtualenv
 virtualenv myenv --python=python3.6
@@ -39,17 +40,16 @@ sudo ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 sudo service cron restart
 
 /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py
-# sudo su - postgres -c "gunzip -c /vagrant/compressed_stock_price_history.gz | psql stockdb "
-
-sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql"
-sudo su postgres -c "psql -d stockdb -a -f /vagrant/removeduplicates_from_stockpricehistory.sql"
+# sudo su - postgres -c "gunzip -c /vagrant/sql_files/compressed_stock_price_history.gz | psql stockdb "
+sudo su postgres -c "psql -d stockdb -a -f /vagrant/sql_files/removeduplicates_from_stockpricehistory.sql"
+sudo su - postgres -c "psql stockdb < /vagrant/sql_files/other_scripts.sql"
 touch /home/vagrant/autofile
 sudo chmod 777 /home/vagrant/autofile
 
 #### DAILY JOB BELOW
 echo "30 16 * * 1-5 /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py  >> /vagrant/cronlogfile.log" >> mycron
-echo '30 17 * * 1-5 sudo su postgres -c "psql - stockdb -a -f /vagrant/removeduplicates_from_stockpricehistory.sql" ' >> mycron
-echo '40 17 * * 1-5 sudo su - postgres -c "psql stockdb < /vagrant/other_scripts.sql" ' >> mycron
+echo '30 17 * * 1-5 sudo su postgres -c "psql -d stockdb -a -f /vagrant/sql_files/removeduplicates_from_stockpricehistory.sql" ' >> mycron
+echo '40 17 * * 1-5 sudo su - postgres -c "psql stockdb < /vagrant/sql_files/other_scripts.sql" ' >> mycron
 
 sudo su - vagrant -c "crontab mycron"
 rm mycron
