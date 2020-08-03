@@ -25,6 +25,8 @@ sp500symbols=[]
 for each in sp500json:
 	sp500symbols.append(each['Symbol'])
 
+sp500symbols.remove('MON')
+
 # url_nasdaq='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download'''
 # url_amex='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download'''
 # url_nyse='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download'''
