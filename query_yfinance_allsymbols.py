@@ -1,13 +1,11 @@
-import datetime
-import re
-from io import StringIO
-
-import pandas as pd
-import sqlalchemy
-
 import requests
+import pandas as pd
+import datetime
 import yfinance as yf
-
+import sqlalchemy
+import requests  
+from io import StringIO
+import re
 engine = sqlalchemy.create_engine('postgresql://vagrant:vagrant@0.0.0.0:5432/stockdb')
 with open('/home/vagrant/autofile','a+') as f:
 	f.write('Program started running at :'+datetime.datetime.today().strftime("%Y-%m-%d-%H-%M-%S")+'\n')
@@ -25,21 +23,21 @@ sp500symbols=[]
 for each in sp500json:
 	sp500symbols.append(each['Symbol'])
 
-# url_nasdaq='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download'''
-# url_amex='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download'''
-# url_nyse='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download'''
+url_nasdaq='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download'''
+url_amex='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download'''
+url_nyse='''https://old.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download'''
 
-# uniquesymbolsonly=list(set(GetStockList(url_nasdaq)+GetStockList(url_nyse)+GetStockList(url_amex)+sp500symbols))
-# uniquesymbolsonly= [sym for sym in uniquesymbolsonly if re.match("^[a-zA-Z]*$", sym)]
+uniquesymbolsonly=list(set(GetStockList(url_nasdaq)+GetStockList(url_nyse)+GetStockList(url_amex)+sp500symbols))
+uniquesymbolsonly= [sym for sym in uniquesymbolsonly if re.match("^[a-zA-Z]*$", sym)]
 
-# for sym in sp500symbols:
-# 	try:
-# 		uniquesymbolsonly.remove(sym)
-# 		uniquesymbolsonly.insert(0,sym)
-# 	except:
-# 		continue
+for sym in sp500symbols:
+	try:
+		uniquesymbolsonly.remove(sym)
+		uniquesymbolsonly.insert(0,sym)
+	except:
+		continue
 
-print('Got Stock Symbol Lists......Total Symbols - ',str(len(sp500symbols)))
+print('Got Stock Symbol Lists......Total Symbols - ',str(len(uniquesymbolsonly)))
 
 
 
@@ -139,10 +137,10 @@ def Get_Ticker_Information(stocklist):
 
 
 if not engine.dialect.has_table(engine, table_name='stock_price_history',schema='public'):
-	Get_Data_From_Yahoo_full_load(sp500symbols)
+	Get_Data_From_Yahoo_full_load(uniquesymbolsonly)
 
 else:
-	Get_Data_From_Yahoo_daily(sp500symbols)
+	Get_Data_From_Yahoo_daily(uniquesymbolsonly)
 
 
 with open('/home/vagrant/autofile','a+') as f:
