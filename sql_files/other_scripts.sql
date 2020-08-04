@@ -116,4 +116,5 @@ left join public.return_30_day d30 on (d1.symbol=d30.symbol);
     END
 $$ 	LANGUAGE plpgsql;
 
+
 SELECT public.get_return();
