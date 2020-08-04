@@ -18,29 +18,29 @@ EOF
 sudo -u postgres psql -c "CREATE ROLE vagrant SUPERUSER LOGIN PASSWORD 'vagrant';"
 sudo su postgres -c "createdb -E UTF8 -T template0 --locale=en_US.utf8 -O vagrant stockdb"
 sudo service postgresql restart
-sudo su - postgres -c "psql stockdb < /vagrant/sql_files/populate_stockinfotable_from_local_insert.sql"
-sudo su - postgres -c "psql stockdb < /vagrant/sql_files/cleanup_stockinfotable.sql"
-
 sudo pip install virtualenv
 virtualenv myenv --python=python3.6
 source myenv/bin/activate
-pip install pandas
-pip install sqlalchemy
-pip install requests
-pip install yfinance
-pip install psycopg2-binary==2.7.7
-pip install lxml
-pip install django==2.1.2
-pip install django-mathfilters
-pip install psycopg2-binary
-pip install gunicorn
+# pip install pandas
+# pip install sqlalchemy
+# pip install requests
+# pip install yfinance
+# pip install psycopg2-binary==2.7.7
+# pip install lxml
+# pip install django==2.1.2
+# pip install django-mathfilters
+# pip install psycopg2-binary
+# pip install gunicorn
+pip install -r /vagrant/requirements.txt
 
 sudo rm /etc/localtime
 sudo ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime
 sudo service cron restart
 
-/home/vagrant/myenv/bin/python /vagrant/query_yfinance.py
-# sudo su - postgres -c "gunzip -c /vagrant/sql_files/compressed_stock_price_history.gz | psql stockdb "
+sudo su - postgres -c "psql stockdb < /vagrant/sql_files/populate_stockinfotable_from_local_insert.sql"
+sudo su - postgres -c "psql stockdb < /vagrant/sql_files/cleanup_stockinfotable.sql"
+# /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py
+sudo su - postgres -c "gunzip -c /vagrant/sql_files/compressed_stock_price_history.gz | psql stockdb "
 sudo su postgres -c "psql -d stockdb -a -f /vagrant/sql_files/removeduplicates_from_stockpricehistory.sql"
 sudo su - postgres -c "psql stockdb < /vagrant/sql_files/other_scripts.sql"
 touch /home/vagrant/autofile

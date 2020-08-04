@@ -1,0 +1,115 @@
+{% extends 'stockdash/base.html' %}
+{# Load the tag library #}
+{% load bootstrap4 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% block content %}
+<h4><span id="todaydate" class="text-muted">last updated {{stockobjects.qs.0.date_traded}}</span></h4>
+
+
+<form method="get">
+<div class="row">
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.sector %}
+	</div>
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.industry %}
+    </div>
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.symbolname %}
+    </div>
+   	<div class="col">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.marketcap_gt %}
+	</div>
+    <div class="col">
+	{%  bootstrap_field stockobjects.form.marketcap_lt %}
+	</div>
+	<div class="col">
+	</div>
+	<div class="col">
+	</div>
+</div>
+
+<div class="row">
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.return_1_daygt %}
+	</div>
+    <div class="col">
+	{%  bootstrap_field stockobjects.form.return_1_daylt %}
+	</div>
+	<div class="col">
+	</div>
+	<div class="col">
+	</div>
+</div>
+
+<div class="row">
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.return_7_daygt %}
+    </div>
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.return_7_daylt %}
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.return_14_daygt %}
+    </div>
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.return_14_daylt %}
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.return_30_daygt %}
+    </div>
+    <div class="col">
+    {%  bootstrap_field stockobjects.form.return_30_daylt %}
+    </div>
+    <div class="col">
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+    <input type="submit" />
+</form>
+<table id="content-table" class="sortable">
+	<tr>
+		<th>SECTOR</th><th>INDUSTRY</th><th>SYMBOL</th><th>NAME</th><th>LAST PRICE</th><th>MARKET CAP</th><th>RETURN 1 DAY</th><th>RETURN 7 DAY</th><th>RETURN 14 DAY</th><th>RETURN 30 DAY</th>
+	</tr>
+	{% for sobj in stockobjects.qs %}
+	<tr>
+		<td>{{sobj.sector}}</td><td>{{sobj.industry}}</td><td><a href="{% url 'stockpage' sobj.symbol %}">{{sobj.symbol}}</a></td><td>{{sobj.symbolname}}</td>
+		<td>${{sobj.latest_close}}</td>
+		<td>${{sobj.marketcap}} B</td>
+		<td>{{sobj.return_1_day}}%</td>
+		<td>{{sobj.return_7_day}}%</td>
+		<td>{{sobj.return_14_day}}%</td>
+		<td>{{sobj.return_30_day}}%</td>
+	</tr>
+	{% endfor %}
+</table>
+
+
+{% endblock content %}

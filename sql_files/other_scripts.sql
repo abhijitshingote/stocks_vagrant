@@ -25,6 +25,7 @@ CREATE FUNCTION get_return() RETURNS void AS $$
     #variable_conflict use_variable
     DECLARE
         curtime timestamp := now();
+        
     BEGIN
    
 drop table if exists public.return_1_day;
@@ -39,7 +40,15 @@ where ph.date_traded=(select max(date_traded) from public.price_history)) as tod
 
 inner join (select  ph.date_traded,ph.symbol,ph.close_price
 from public.price_history ph
-where ph.date_traded=(select max(date_traded)-1 from public.price_history) ) as prior
+where ph.date_traded=(
+select case when  
+extract(isodow from 
+(select max(date_traded) from public.price_history))=1
+then (select max(date_traded) from public.price_history)-3
+else (select max(date_traded)-1 from public.price_history)
+end
+) 
+) as prior
 on today.symbol=prior.symbol
 inner join  public.stockinfo s on (today.symbol=s.symbol);	    
 
@@ -108,6 +117,3 @@ left join public.return_30_day d30 on (d1.symbol=d30.symbol);
 $$ 	LANGUAGE plpgsql;
 
 SELECT public.get_return();
-
-
-
