@@ -141,7 +141,7 @@ def Get_Ticker_Information(stocklist):
 
 
 if not engine.dialect.has_table(engine, table_name='stock_price_history',schema='public'):
-	Get_Data_From_Yahoo_full_load(sp500symbols)
+	Get_Data_From_Yahoo_full_load(sp500symbols[:100])
 
 else:
 	Get_Data_From_Yahoo_daily(sp500symbols)

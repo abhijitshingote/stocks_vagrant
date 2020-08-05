@@ -39,8 +39,8 @@ sudo service cron restart
 
 sudo su - postgres -c "psql stockdb < /vagrant/sql_files/populate_stockinfotable_from_local_insert.sql"
 sudo su - postgres -c "psql stockdb < /vagrant/sql_files/cleanup_stockinfotable.sql"
-# /home/vagrant/myenv/bin/python /vagrant/query_yfinance.py
-sudo su - postgres -c "gunzip -c /vagrant/sql_files/compressed_stock_price_history.gz | psql stockdb "
+/home/vagrant/myenv/bin/python /vagrant/query_yfinance.py
+# sudo su - postgres -c "gunzip -c /vagrant/sql_files/compressed_stock_price_history.gz | psql stockdb "
 sudo su postgres -c "psql -d stockdb -a -f /vagrant/sql_files/removeduplicates_from_stockpricehistory.sql"
 sudo su - postgres -c "psql stockdb < /vagrant/sql_files/other_scripts.sql"
 touch /home/vagrant/autofile
